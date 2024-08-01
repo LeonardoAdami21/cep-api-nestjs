@@ -5,11 +5,18 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import axios from 'axios';
-import { envoriment } from 'src/env/envoriment';
+import { envoriment } from '../env/envoriment';
 
 @Injectable()
 export class CepService {
-  async getCep(cep: string) {
+  async getAllCeps(cep: string[]) {
+    const result = cep.map(async (cep) => {
+      return await this.getCep(cep);
+    });
+    return await Promise.all(result);
+  }
+
+  async getCep(cep: any) {
     try {
       const response = await axios(`${envoriment.viaCepUrl}/${cep}/json/`);
       if (!response.data) {
@@ -29,7 +36,6 @@ export class CepService {
         ibge: data.ibge,
         gia: data.gia,
         ddd: data.ddd,
-        siafi: data.siafi,
       };
     } catch (error) {
       throw new InternalServerErrorException({ error: error.message });
