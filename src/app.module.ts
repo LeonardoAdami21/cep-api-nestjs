@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { CepModule } from './cep/cep.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [CepModule],
+  imports: [ConfigModule.forRoot({}), CepModule],
 })
 export class AppModule {}
